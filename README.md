@@ -16,7 +16,7 @@
 在体验之前，需要具备以下基本条件：
 
 - 地平线RDK已烧录好地平线提供的Ubuntu 20.04系统镜像
-- 已拥有OpenAI API key，并可正常访问OpenAI API。
+- 已拥有ChatGPT API Key，并且网络可正常访问ChatGPT API。
 - 音频板正确连接到RDK X3，耳机接口接上耳机或音响
 
 ## 机器人组装
