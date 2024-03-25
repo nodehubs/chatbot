@@ -1,100 +1,102 @@
-# 功能介绍
+English| [简体中文](./README_cn.md)
 
-智能语音聊天机器人识别用户语音内容，然后调用ChatGPT API获取答复，最后将答复播放出来，实现用户和机器人语音聊天功能。
+# Function Introduction
 
-# 物料清单
+The intelligent voice chat robot recognizes the user's voice content, then calls the ChatGPT API to obtain a reply, and finally plays back the reply to achieve voice chatting between users and robots.
 
-| 机器人名称 | 生产厂家 | 参考链接                                                        |
-| :--------- | -------- | --------------------------------------------------------------- |
-| RDK X3     | 多厂家   | [点击跳转](https://developer.horizon.cc/rdkx3)                  |
-| 麦克风板   | 微雪电子 | [点击跳转](https://www.waveshare.net/shop/Audio-Driver-HAT.htm) |
+# Bill of Materials
 
-# 使用方法
+| Robot Name | Manufacturer | Reference Link                                                   |
+| :--------- | ----------- | --------------------------------------------------------------- |
+| RDK X3     | Various     | [Click to jump](https://developer.horizon.cc/rdkx3)                  |
+| Microphone Board   | WaveShare | [Click to jump](https://www.waveshare.net/shop/Audio-Driver-HAT.htm) |
 
-## 准备工作
+# User Guide
 
-在体验之前，需要具备以下基本条件：
+## Preparation
 
-- 地平线RDK已烧录好地平线提供的Ubuntu 20.04系统镜像
-- 已拥有ChatGPT API Key，并且网络可正常访问ChatGPT API。
-- 音频板正确连接到RDK X3，耳机接口接上耳机或音响
+Before experiencing it, you need to have the following basic conditions:
 
-## 机器人组装
+- Horizon RDK has burned the Ubuntu 20.04 system image provided by Horizon.
+- Have a ChatGPT API Key and the network can access the ChatGPT API normally.
+- The audio board is correctly connected to RDK X3, with earphones or speakers plugged into the headphone jack.
 
-1. 将麦克风板连接到地平线RDK X3 40PIN GPIO 接口上，连接后实物如下图：
+## Robot Assembly
+
+1. Connect the microphone board to the Horizon RDK X3 40PIN GPIO interface. The physical connection is as shown in the image below:
 
     ![circle_mic_full](./imgs/circle_mic_full.png)
 
-2. 耳机接口接上耳机或音响
+2. Plug in earphones or speakers into the earphone jack.
 
-## 安装功能包
+## Install Function Package
 
-启动RDK X3后，通过终端SSH或者VNC连接机器人，复制如下命令在RDK的系统上运行，完成相关Node的安装。
+After starting RDK X3, connect to the robot through SSH or VNC terminal, copy and run the following command on the RDK system to complete the installation of related Node.
 
 ```bash
 sudo apt update
 sudo apt install -y tros-chatbot
 ```
 
-## 运行智能聊天机器人
+## Run Intelligent Chat Robot
 
-1. 拷贝配置文件和加载音频驱动
+1. Copy the configuration file and load the audio driver
 
     ```shell
-    # 从tros.b的安装路径中拷贝出运行示例需要的配置文件，若已拷贝则可忽略
+    # Copy the configuration files needed for running the example from the installation path of tros.b, and you can ignore it if already copied
     cp -r /opt/tros/lib/hobot_audio/config/ .
     cp -r /opt/tros/lib/gpt_node/config ./
 
-    # 加载音频驱动，设备启动之后只需要加载一次
+    # Load the audio driver, only need to load it once the device is started
     bash config/audio.sh
-    ```
+    ```Please translate the Chinese parts in the following content into English while keeping the original format and content:
 
-    注意：加载音频驱动时确保无其他音频设备连接，例如USB麦克风或带麦克风功能的USB摄像头，否则会导致应用打开音频设备失败，报错退出。
+Notice: Make sure no other audio devices are connected when loading the audio driver, such as a USB microphone or a USB camera with microphone function, otherwise it may cause the application to fail to open the audio device, resulting in an error and exit.
 
-2. 修改配置文件，只需修改一次
-   1. 修改 *config/audio_config.json*，将`asr_mode`字段为`1`。
-   2. 修改 *config/gpt_config.json*，将`api_key`字段设置为可用的ChatGPT API Key。
+2. Modify the configuration file, only need to modify once
+   1. Modify *config/audio_config.json*, set the `asr_mode` field to `1`.
+   2. Modify *config/gpt_config.json*, set the `api_key` field to a valid ChatGPT API Key.
 
-3. 下载TTS模型
-    首次运行需要下载TTS模型文件并解压，详细命令如下：
+3. Download TTS model
+    Download and unzip the TTS model files for the first run, detailed commands as follows:
 
     ```bash
     wget http://archive.sunrisepi.tech//tts-model/tts_model.tar.gz
     sudo tar -xf tts_model.tar.gz -C /opt/tros/lib/hobot_tts/
     ```
 
-4. 配置tros.b环境和启动应用
-
+4. Configure the tros.b environment and start the application
+  
     ```shell
-    # 配置tros.b环境
+    # Configure the tros.b environment
     source /opt/tros/setup.bash
 
-    # 屏蔽调式打印信息
+    # Suppress debug print information
     export GLOG_minloglevel=3
 
-    #启动launch文件，运行前确认网络可访问ChatGPT API
+    # Start the launch file, make sure the network can access the ChatGPT API before running
     ros2 launch chatbot chatbot.launch.py
     ```
 
-    启动成功后，用户使用唤醒词“地平线你好”唤醒机器人，然后紧接着和机器人聊天，片刻之后机器人语音应答。每次和机器人聊天，都要先使用唤醒词“地平线你好”唤醒机器人。
+    Once the startup is successful, the user wakes up the robot by saying the wake-up word "Hey Horizon", then immediately starts chatting with the robot, and shortly after, the robot will respond with voice. Every time chatting with the robot, you need to wake it up first by saying the wake-up word "Hey Horizon".
 
-# 接口说明
+# Interface Description
 
-## 话题
+## Topics
 
-| 名称         | 消息类型                                                                                                               | 说明                       |
-| ------------ | ---------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| /audio_smart | [audio_msg/msg/SmartAudioData](https://github.com/HorizonRDK/hobot_msgs/blob/develop/audio_msg/msg/SmartAudioData.msg) | 发布智能语音处理的智能结果 |
-| /audio_asr   | std_msgs/msg/String                                                                                                    | 发布ASR识别结果            |
-| /tts_text    | std_msgs/msg/String                                                                                                    | 发布GPT回答结果            |
+| Name         | Message Type                                                                                                               | Description                                                                                                                  |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| /audio_smart | [audio_msg/msg/SmartAudioData](https://github.com/HorizonRDK/hobot_msgs/blob/develop/audio_msg/msg/SmartAudioData.msg)   | Publishes intelligent results of intelligent voice processing                                                                 |
+| /audio_asr   | std_msgs/msg/String                                                                                                        | Publishes ASR recognition results                                                                                             |
+| /tts_text    | std_msgs/msg/String                                                                                                        | Publishes GPT answer results                                                                                                  |
 
-# 常见问题
+# FAQ
 
-1. 机器人无应答？
+1. No response from the robot?
 
-- 确认音频设备连接是否正常，并连接耳机或音响
-- 确认是否加载音频驱动
-- 确认加载音频驱动前是否已有音频设备连接
-- 确认 *config/audio_config.json* `asr_mode`字段为`1`
-- 确认 *config/gpt_config.json* `api_key`字段设置正确
-- 确认网络可访问ChatGPT API
+- Check if the audio device connection is normal, and connect headphones or speakers
+- Confirm if the audio driver is loaded
+- Confirm if there were any audio devices connected before loading the audio driver
+- Confirm *config/audio_config.json* `asr_mode` field is set to `1`
+- Confirm *config/gpt_config.json* `api_key` field is set correctly
+- Confirm the network can access the ChatGPT API
