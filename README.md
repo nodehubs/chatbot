@@ -49,7 +49,7 @@ sudo apt install -y tros-chatbot
 
     # Load the audio driver, only need to load it once the device is started
     bash config/audio.sh
-    ```Please translate the Chinese parts in the following content into English while keeping the original format and content:
+    ```
 
 Notice: Make sure no other audio devices are connected when loading the audio driver, such as a USB microphone or a USB camera with microphone function, otherwise it may cause the application to fail to open the audio device, resulting in an error and exit.
 
