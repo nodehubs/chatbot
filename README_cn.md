@@ -33,19 +33,36 @@
 
 启动RDK X3后，通过终端SSH或者VNC连接机器人，复制如下命令在RDK的系统上运行，完成相关Node的安装。
 
+tros foxy 版本 
 ```bash
 sudo apt update
 sudo apt install -y tros-chatbot
 ```
+tros humble 版本
+```bash
+sudo apt update
+sudo apt install -y tros-humble-chatbot
+```
+
 
 ## 运行智能聊天机器人
 
 1. 拷贝配置文件和加载音频驱动
 
+    tros foxy 版本 
     ```shell
     # 从tros.b的安装路径中拷贝出运行示例需要的配置文件，若已拷贝则可忽略
     cp -r /opt/tros/lib/hobot_audio/config/ .
     cp -r /opt/tros/lib/gpt_node/config ./
+
+    # 加载音频驱动，设备启动之后只需要加载一次
+    bash config/audio.sh
+    ```
+    tros humble 版本 
+    ```shell
+    # 从tros.b的安装路径中拷贝出运行示例需要的配置文件，若已拷贝则可忽略
+    cp -r /opt/tros/humble/lib/hobot_audio/config/ .
+    cp -r /opt/tros/humble/lib/gpt_node/config ./
 
     # 加载音频驱动，设备启动之后只需要加载一次
     bash config/audio.sh
@@ -60,16 +77,34 @@ sudo apt install -y tros-chatbot
 3. 下载TTS模型
     首次运行需要下载TTS模型文件并解压，详细命令如下：
 
+    tros foxy 版本 
     ```bash
     wget http://archive.sunrisepi.tech//tts-model/tts_model.tar.gz
     sudo tar -xf tts_model.tar.gz -C /opt/tros/lib/hobot_tts/
     ```
+    tros foxy 版本 
+    ```bash
+    wget http://archive.sunrisepi.tech//tts-model/tts_model.tar.gz
+    sudo tar -xf tts_model.tar.gz -C /opt/tros/humble/lib/hobot_tts/
+    ```
 
 4. 配置tros.b环境和启动应用
 
+    tros foxy 版本 
     ```shell
     # 配置tros.b环境
     source /opt/tros/setup.bash
+
+    # 屏蔽调式打印信息
+    export GLOG_minloglevel=3
+
+    #启动launch文件，运行前确认网络可访问ChatGPT API
+    ros2 launch chatbot chatbot.launch.py
+    ```
+    tros humble 版本 
+    ```shell
+    # 配置tros.b环境
+    source /opt/tros/humble/setup.bash
 
     # 屏蔽调式打印信息
     export GLOG_minloglevel=3

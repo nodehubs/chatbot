@@ -42,10 +42,20 @@ sudo apt install -y tros-chatbot
 
 1. Copy the configuration file and load the audio driver
 
+    tros foxy:
     ```shell
     # Copy the configuration files needed for running the example from the installation path of tros.b, and you can ignore it if already copied
     cp -r /opt/tros/lib/hobot_audio/config/ .
     cp -r /opt/tros/lib/gpt_node/config ./
+
+    # Load the audio driver, only need to load it once the device is started
+    bash config/audio.sh
+    ```
+    tros humble:
+    ```shell
+    # Copy the configuration files needed for running the example from the installation path of tros.b, and you can ignore it if already copied
+    cp -r /opt/tros/humble/lib/hobot_audio/config/ .
+    cp -r /opt/tros/humble/lib/gpt_node/config ./
 
     # Load the audio driver, only need to load it once the device is started
     bash config/audio.sh
@@ -60,16 +70,34 @@ Notice: Make sure no other audio devices are connected when loading the audio dr
 3. Download TTS model
     Download and unzip the TTS model files for the first run, detailed commands as follows:
 
+    tros foxy:
     ```bash
     wget http://archive.sunrisepi.tech//tts-model/tts_model.tar.gz
     sudo tar -xf tts_model.tar.gz -C /opt/tros/lib/hobot_tts/
     ```
+    tros humble:
+    ```bash
+    wget http://archive.sunrisepi.tech//tts-model/tts_model.tar.gz
+    sudo tar -xf tts_model.tar.gz -C /opt/tros/humble/lib/hobot_tts/
+    ```
 
 4. Configure the tros.b environment and start the application
-  
+
+    tros foxy:
     ```shell
     # Configure the tros.b environment
     source /opt/tros/setup.bash
+
+    # Suppress debug print information
+    export GLOG_minloglevel=3
+
+    # Start the launch file, make sure the network can access the ChatGPT API before running
+    ros2 launch chatbot chatbot.launch.py
+    ```
+    tros humble:
+    ```shell
+    # Configure the tros.b environment
+    source /opt/tros/humble/setup.bash
 
     # Suppress debug print information
     export GLOG_minloglevel=3
